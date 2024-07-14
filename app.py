@@ -4,7 +4,7 @@ from youtube_transcript_api import YouTubeTranscriptApi
 API_KEY=st.text_input("Enter your api key")
 genai.configure(api_key=API_KEY)
 
-prompt="This is the transcript of youtube video. create detailed notes for this video. make the complete notes for this video without missing any points. dont reduce the information.  Give notes output in english only"
+prompt="This is the transcript of youtube video. make the complete notes for this video without missing any points. Give output in english only even the transcript is in other language you have to translate and give notes for it in english only"
 
 
 ## getting the transcript data from yt videos
