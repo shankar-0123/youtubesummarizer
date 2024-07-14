@@ -1,10 +1,7 @@
 import streamlit as st
-import os
 import google.generativeai as genai
 from youtube_transcript_api import YouTubeTranscriptApi
-from dotenv import load_dotenv
-load_dotenv()
-API_KEY = os.getenv("API_KEY")
+API_KEY=st.text_input("Enter your api key")
 genai.configure(api_key=API_KEY)
 
 prompt="This is the transcript of youtube video. create detailed notes for this video. make the complete notes for this video without missing any points. dont reduce the information.  Give notes output in english only"
