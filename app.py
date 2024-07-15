@@ -47,12 +47,8 @@ if youtube_link:
     else  :
         video_id=youtube_link.split("?")[0]
         video_id=video_id[17:]
-        st.write(video_id)
     st.image(f"http://img.youtube.com/vi/{video_id}/0.jpg", use_column_width=True)
-
-if st.button("Get Detailed Notes"):
     transcript_text=extract_transcript_details(video_id)
-
     if transcript_text:
         summary=generate_gemini_content(transcript_text,prompt)
         st.markdown("## Detailed Notes:")
