@@ -9,10 +9,8 @@ prompt="This is the transcript of youtube video. make the complete notes for thi
 
 ## getting the transcript data from yt videos
 def extract_transcript_details(youtube_video_url):
-    try:
-        video_id=youtube_video_url.split("=")[1]
-        
-        transcript_text = YouTubeTranscriptApi.get_transcript(video_id,languages= [
+        vid_id=youtube_video_url
+        transcript_text = YouTubeTranscriptApi.get_transcript(vid_id,languages= [
     "af", "ak", "sq", "am", "ar", "hy", "as", "ay", "az", "bn", "eu", "be", "bho", "bs", "bg",
     "my", "ca", "ceb", "zh-Hans", "zh-Hant", "co", "hr", "cs", "da", "dv", "nl", "en", "eo", "et",
     "ee", "fil", "fi", "fr", "gl", "lg", "ka", "de", "el", "gn", "gu", "ht", "ha", "haw", "iw",
@@ -31,8 +29,7 @@ def extract_transcript_details(youtube_video_url):
 
         return transcript
 
-    except Exception as e:
-        raise e
+
     
 ## getting the summary based on Prompt from Google Gemini Pro
 def generate_gemini_content(transcript_text,prompt):
@@ -54,7 +51,7 @@ if youtube_link:
     st.image(f"http://img.youtube.com/vi/{video_id}/0.jpg", use_column_width=True)
 
 if st.button("Get Detailed Notes"):
-    transcript_text=extract_transcript_details(youtube_link)
+    transcript_text=extract_transcript_details(video_id)
 
     if transcript_text:
         summary=generate_gemini_content(transcript_text,prompt)
