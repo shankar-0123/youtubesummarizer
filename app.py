@@ -50,7 +50,7 @@ if youtube_link:
     transcript_text=extract_transcript_details(video_id)
     if transcript_text:
         summary=generate_gemini_content(transcript_text,prompt)
-        st.markdown("## Detailed Notes:")
+        # st.markdown("## Detailed Notes:")
         st.write(summary)
 
 
