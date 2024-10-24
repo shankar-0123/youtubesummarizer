@@ -17,22 +17,23 @@ prompt = ("This is the transcript of a YouTube video. "
           "Give the output in English only. Even if the transcript is in another language, "
           "you have to translate and give the notes in English.")
 
+# Function to extract video ID from YouTube link
+def get_video_id(youtube_url):
+    if "watch?v=" in youtube_url:
+        return youtube_url.split("watch?v=")[1].split("&")[0]
+    elif "youtu.be" in youtube_url:
+        return youtube_url.split("/")[-1]
+    elif "youtube.com/embed/" in youtube_url:
+        return youtube_url.split("/embed/")[1].split("?")[0]
+    else:
+        st.error("Invalid YouTube URL format.")
+        return None
+
 # Function to extract transcript details from YouTube
-def extract_transcript_details(youtube_video_url):
+def extract_transcript_details(vid_id):
     try:
-        vid_id = youtube_video_url
-        # Attempt to fetch the transcript in the supported languages
-        transcript_text = YouTubeTranscriptApi.get_transcript(vid_id, languages=[
-            "af", "ak", "sq", "am", "ar", "hy", "as", "ay", "az", "bn", "eu", "be", "bho", "bs", "bg",
-            "my", "ca", "ceb", "zh-Hans", "zh-Hant", "co", "hr", "cs", "da", "dv", "nl", "en", "eo", "et",
-            "ee", "fil", "fi", "fr", "gl", "lg", "ka", "de", "el", "gn", "gu", "ht", "ha", "haw", "iw",
-            "hi", "hmn", "hu", "is", "ig", "id", "ga", "it", "ja", "jv", "kn", "kk", "km", "rw", "ko",
-            "kri", "ku", "ky", "lo", "la", "lv", "ln", "lt", "lb", "mk", "mg", "ms", "ml", "mt", "mi",
-            "mr", "mn", "ne", "nso", "no", "ny", "or", "om", "ps", "fa", "pl", "pt", "pa", "qu", "ro",
-            "ru", "sm", "sa", "gd", "sr", "sn", "sd", "si", "sk", "sl", "so", "st", "es", "su", "sw",
-            "sv", "tg", "ta", "tt", "te", "th", "ti", "ts", "tr", "tk", "uk", "ur", "ug", "uz", "vi",
-            "cy", "fy", "xh", "yi", "yo", "zu"
-        ])
+        # Attempt to fetch the transcript in supported languages
+        transcript_text = YouTubeTranscriptApi.get_transcript(vid_id, languages=['en'])
         
         # Concatenate transcript segments into a single string
         transcript = ""
@@ -62,17 +63,17 @@ def generate_gemini_content(transcript_text, prompt):
 
 # Main code execution
 if youtube_link and API_KEY:
-    if "watch" in youtube_link:
-        video_id = youtube_link.split("?v=")[1].split("&")[0]
-    else:
-        video_id = youtube_link.split("/")[-1]
+    video_id = get_video_id(youtube_link)  # Extract video ID
 
-    # Get the transcript of the video
-    transcript_text = extract_transcript_details(video_id)
+    if video_id:
+        st.write(f"Extracted Video ID: {video_id}")  # Display extracted video ID for debugging
 
-    if transcript_text:
-        # Generate the notes using the transcript and Google Gemini API
-        summary = generate_gemini_content(transcript_text, prompt)
-        # Display the summary (detailed notes) in the Streamlit app
-        st.markdown("## Detailed Notes:")
-        st.write(summary)
+        # Get the transcript of the video
+        transcript_text = extract_transcript_details(video_id)
+
+        if transcript_text:
+            # Generate the notes using the transcript and Google Gemini API
+            summary = generate_gemini_content(transcript_text, prompt)
+            # Display the summary (detailed notes) in the Streamlit app
+            st.markdown("## Detailed Notes:")
+            st.write(summary)
