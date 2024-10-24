@@ -46,7 +46,7 @@ if youtube_link:
     else  :
         video_id=youtube_link.split("?")[0]
         video_id=video_id[17:]
-    st.image(f"http://img.youtube.com/vi/{video_id}/0.jpg", use_column_width=True)
+  #  st.image(f"http://img.youtube.com/vi/{video_id}/0.jpg", use_column_width=True)
     transcript_text=extract_transcript_details(video_id)
     if transcript_text:
         summary=generate_gemini_content(transcript_text,prompt)
