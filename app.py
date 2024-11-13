@@ -22,7 +22,7 @@ def get_video_id(youtube_url):
     if "watch?v=" in youtube_url:
         return youtube_url.split("watch?v=")[1].split("&")[0]
     elif "youtu.be" in youtube_url:
-        return youtube_url.split("/")[-1]
+        return youtube_url.split("=")[-1]
     elif "youtube.com/embed/" in youtube_url:
         return youtube_url.split("/embed/")[1].split("?")[0]
     else:
